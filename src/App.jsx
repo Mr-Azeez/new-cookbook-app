@@ -12,7 +12,7 @@ function App() {
   const { favoriteList, recipe } = useContext(GlobalContext);
   return (
     <div className="App">
-      <BrowserRouter>
+      <BrowserRouter basename="/new-cookbook-app">
         <Routes>
           <Route index element={<Home />} />
           <Route path="/home" element={<Home />} />
