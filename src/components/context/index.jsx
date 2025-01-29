@@ -9,7 +9,7 @@ export default function GlobalState({ children }) {
   const [searchParameter, setSearchParameter] = useState("");
   const [recipeIngredients, setRecipeIngredients] = useState([]);
   const [nutritionData, setNutritionData] = useState([]);
-  const [detailedSteps, setDetailedSteps] = useState("");
+  const [detailedSteps, setDetailedSteps] = useState(null);
   const [searchResult, setSearchResult] = useState([]);
   // const [checkFavorite, setCheckFavorite] = useState(null);
   const [favoriteList, setFavoriteList] = useState([]);

@@ -38,12 +38,11 @@ export default function RecipeDetailsPage() {
     // console.log(recipeIngredients);
   }
 
-  const apiKey = process.env.REACT_APP_OPENAI_API_KEY;
+  const apiKey = import.meta.env.VITE_OPENAI_API_KEY;
   // const openai = new OpenAI();
 
-  async function handleDetailedSteps(array) {
+  async function handleDetailedSteps(title) {
     try {
-      
       const response = await fetch(
         "https://api.openai.com/v1/chat/completions",
         {
@@ -58,7 +57,7 @@ export default function RecipeDetailsPage() {
               { role: "system", content: "You are a helpful assistant" },
               {
                 role: "user",
-                content: `Here is an array of ingredients: ${array}. Can you suggest the steps used in cooking the meal`,
+                content: `Give me the steps on how to prepare ${title}`,
               },
             ],
             max_tokens: 500,
@@ -68,8 +67,11 @@ export default function RecipeDetailsPage() {
       );
 
       const data = await response.json();
-      console.log(data);
-      // console.log(recipeArray);
+      const steps = parseOpenAIResponse(data.choices[0].message.content);
+      // console.log(steps);
+      // console.log(data.choices[0].message.content);
+
+      setDetailedSteps(steps);
     } catch (error) {
       console.error("Error generating steps:", error);
     }
@@ -77,19 +79,36 @@ export default function RecipeDetailsPage() {
 
   useEffect(() => {
     getNutrition();
-    handleDetailedSteps(recipeArray);
+    handleDetailedSteps(title);
   }, []);
+
+  const parseOpenAIResponse = (response) => {
+    const steps = response.split("\n").filter((line) => line.match(/^\d+\./));
+    return steps.map((step) => step.trim().replace(/^\d+\.\s*/, ""));
+  };
 
   return (
     <div className="container">
       <NavBar />
       <div className="ingredients-page">
-        <div className="ingredients-image-container">
-          <h1 className="food-name">{title}</h1>
-          <img
-            src={`https://img.spoonacular.com/recipes/${id}-556x370.jpg`}
-            alt=""
-          />
+        <div>
+          <div className="ingredients-image-container">
+            <h1 className="food-name">{title}</h1>
+            <img
+              src={`https://img.spoonacular.com/recipes/${id}-556x370.jpg`}
+              alt=""
+            />
+          </div>
+            {detailedSteps ? (
+              <ul className="ingredients-information">
+                <h2>Instruction</h2>
+                {detailedSteps.map((step, index) => (
+                  <li key={index}>{step}</li>
+                ))}
+              </ul>
+            ) : (
+              <p>No recipe data available.</p>
+            )}
         </div>
         <div className="more-action-plus-info">
           <div className="ingredients-more-action">
@@ -106,29 +125,40 @@ export default function RecipeDetailsPage() {
               <p>Share</p>
             </div>
           </div>
-          <ul className="ingredients-information">
-            <h2>Ingredients</h2>
-            {recipeIngredients.map((recipeIngredient, index) => (
-              <li key={index} className="list-of-ingredients">
-                <span>
-                  {recipeIngredient.amount} {recipeIngredient.unit}{" "}
-                  {recipeIngredient.name}
-                </span>
-                {/* <span>{recipeIngredient}</span> */}
-              </li>
-            ))}
-          </ul>
-          <div className="nutrition">
-            <h2>Nutrition</h2>
-            {nutritionData.map((nutrition, index) => (
-              <li key={index} className="list-of-nutrition">
+            
+          {recipeIngredients && recipeIngredients.length ? (
+            <ul className="ingredients-information">
+              <h2>Ingredients</h2>
+              {recipeIngredients.map((recipeIngredient, index) => (
+                <li key={index} className="list-of-ingredients">
+                  <span>
+                    {recipeIngredient.amount} {recipeIngredient.unit}{" "}
+                    {recipeIngredient.name}
+                  </span>
+                  {/* <span>{recipeIngredient}</span> */}
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p>No Ingredients available</p>
+          )}
+
+        
+            {nutritionData && nutritionData.length ? (
+              <ul className="ingredients-information">
+                <h2>Nutrition</h2>
+                {nutritionData.map((nutrition, index) => (
+                  <li key={index} className="list-of-nutrition">
                 <span>{nutrition.name}:</span>
                 <span className="nutrition-unit">
                   {nutrition.amount} {nutrition.unit}
                 </span>
               </li>
-            ))}
-          </div>
+                ))}
+              </ul>
+            ) : (
+              <p>No nutrition data available at the moment</p>
+            )}
         </div>
       </div>
     </div>
