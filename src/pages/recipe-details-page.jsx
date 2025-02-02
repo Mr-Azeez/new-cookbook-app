@@ -49,7 +49,7 @@ export default function RecipeDetailsPage() {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${apiKey}`, // Use API key directly
+            Authorization: `Bearer ${apiKey}`,
           },
           body: JSON.stringify({
             model: "gpt-3.5-turbo",
@@ -65,12 +65,8 @@ export default function RecipeDetailsPage() {
           }),
         }
       );
-
       const data = await response.json();
       const steps = parseOpenAIResponse(data.choices[0].message.content);
-      // console.log(steps);
-      // console.log(data.choices[0].message.content);
-
       setDetailedSteps(steps);
     } catch (error) {
       console.error("Error generating steps:", error);
@@ -99,16 +95,16 @@ export default function RecipeDetailsPage() {
               alt=""
             />
           </div>
-            {detailedSteps ? (
-              <ul className="ingredients-information">
-                <h2>Instruction</h2>
-                {detailedSteps.map((step, index) => (
-                  <li key={index}>{step}</li>
-                ))}
-              </ul>
-            ) : (
-              <p>No recipe data available.</p>
-            )}
+          {detailedSteps ? (
+            <ul className="ingredients-information">
+              <h2>Instruction</h2>
+              {detailedSteps.map((step, index) => (
+                <li key={index}>{step}</li>
+              ))}
+            </ul>
+          ) : (
+            <p>No recipe data available.</p>
+          )}
         </div>
         <div className="more-action-plus-info">
           <div className="ingredients-more-action">
@@ -125,7 +121,7 @@ export default function RecipeDetailsPage() {
               <p>Share</p>
             </div>
           </div>
-            
+
           {recipeIngredients && recipeIngredients.length ? (
             <ul className="ingredients-information">
               <h2>Ingredients</h2>
@@ -143,22 +139,21 @@ export default function RecipeDetailsPage() {
             <p>No Ingredients available</p>
           )}
 
-        
-            {nutritionData && nutritionData.length ? (
-              <ul className="ingredients-information">
-                <h2>Nutrition</h2>
-                {nutritionData.map((nutrition, index) => (
-                  <li key={index} className="list-of-nutrition">
-                <span>{nutrition.name}:</span>
-                <span className="nutrition-unit">
-                  {nutrition.amount} {nutrition.unit}
-                </span>
-              </li>
-                ))}
-              </ul>
-            ) : (
-              <p>No nutrition data available at the moment</p>
-            )}
+          {nutritionData && nutritionData.length ? (
+            <ul className="ingredients-information">
+              <h2>Nutrition</h2>
+              {nutritionData.map((nutrition, index) => (
+                <li key={index} className="list-of-nutrition">
+                  <span>{nutrition.name}:</span>
+                  <span className="nutrition-unit">
+                    {nutrition.amount} {nutrition.unit}
+                  </span>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p>No nutrition data available at the moment</p>
+          )}
         </div>
       </div>
     </div>
