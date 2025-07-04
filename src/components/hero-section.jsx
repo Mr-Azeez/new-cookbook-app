@@ -18,7 +18,7 @@ export default function HeroSections({ title, recipe }) {
     <section className="hero-section">
       <h1>{title}</h1>
       <div className="recipe-card-container">
-        {recipe.map((recipeItem) => (
+        {recipe && recipe.map((recipeItem) => (
           <RecipeCard
             key={recipeItem.id}
             recipeItem={recipeItem}

@@ -11,7 +11,6 @@ export default function GlobalState({ children }) {
   const [nutritionData, setNutritionData] = useState([]);
   const [detailedSteps, setDetailedSteps] = useState(null);
   const [searchResult, setSearchResult] = useState([]);
-  // const [checkFavorite, setCheckFavorite] = useState(null);
   const [favoriteList, setFavoriteList] = useState([]);
 
   async function fetchRandomRecipe() {

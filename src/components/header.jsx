@@ -7,7 +7,7 @@ export default function Header() {
       <h2>
         Taste the world: Discover diverse cuisines worldwide at your home!
       </h2>
-      <Link to={"/favorite"}>
+      <Link to={"/favorite"} className="explore-link">
         <button className="explore-btn">
           <p>Go to Favorite</p>
           <ArrowCircleRight2 size="45" color="#fff" variant="Bold" className="arrow-circle-icon" />
